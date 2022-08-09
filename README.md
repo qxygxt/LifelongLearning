@@ -62,6 +62,11 @@ GEM方向的后续改进还有Efficient Lifelong Learning with A-GEM (ICLR 2019)
 
 总体来说，基于回放的增量学习的主要缺点是需要额外的计算资源和存储空间用于回忆旧知识，当任务种类不断增多时，要么训练成本会变高，要么代表样本的代表性会减弱，同时在实际生产环境中，这种方法还可能存在「数据隐私泄露」的问题。
 ## 4.3 参数隔离
+参数隔离的想法比较粗暴，既然改变旧任务的参数会影响旧任务的性能，我们就不动旧任务的参数，增量扩大模型，将新旧任务的参数进行隔离。
+
+PackNet (2018 CVPR) 是一种对新旧任务参数进行硬隔离的办法。每次新任务到来时，PackNet增量使用一部分模型空间，通过剪枝的方法保留冗余的模型空间，为下次任务留下余量。对于一个新任务，训练过程分两步，第一步，模型首先固定旧任务参数，使用整个模型训练当前任务，完成后利用剪枝去除一部分非重要参数。第二步，模型在剩下的参数空间中进行重新训练。显然，PackNet为每个任务分配一部分参数空间，限制了任务个数，对任务的顺序也带来了要求。
+
+HAT(ICML 2018) 使用硬注意力(Hard Attention)机制根据不同任务对模型的不同部分进行遮盖(Mask)，从而为每个任务分配模型的不同部分。同时，HAT使用正则化项对注意力遮盖进行稀疏性约束，使得模型空间可以在任务间进行更好的分配。HAT方法期望使用注意力机制对模型空间进行了任务自适应的分配，可以更好地在任务间共享和隔离参数。
 # Reference
 1. Thrun S, Mitchell T M. Lifelong robot learning. In: Steels L,ed. The Biology and Technology of    Intelligent Autonomous Agents. Berlin: Springer,1995, 165–196
 2. Thrun S. Is learning the n-th thing any easier than learning the first? Advances in Neural Information Processing Systems,1996: 640–646
