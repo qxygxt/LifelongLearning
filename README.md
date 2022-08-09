@@ -115,7 +115,41 @@ HAT(ICML 2018) 使用硬注意力(Hard Attention)机制根据不同任务对模�
 
 5. 多感官处理（Multisensory Learning）是交叉模式激励的物理特性、先验知识、期望（例如，学习的相关性）、协同（scaffolding）感知、认知和行为之间相互作用的结果。
 Multisensory Learning的过程在整个生命是动态的，会受到短期和长期变化的影响。它由外在和内在（exogenous & endogenous）因素的动态加权组成，这些因素决定了多模态如何相互影响。
+## 5.2 “A continual learning survey: Defying forgetting in classification tasks“，2020年5月，作者来自KU Leuven和华为公司
+### 5.2.1 摘要
+这个综述专注于task incremental classification
+本文主要工作包括：
+1）最新技术的分类和总结，
+2）使一个continual learner连续地确定stability-plasticity 折中的新框架，
+3）对11种最先进的continual learning方法和4个baseline进行全面的实验比较。
+## 5.3 “Class-incremental learning: survey and performance evaluation“，2020年
+### 5.3.1 摘要
+大多数早期的递增学习方法都考虑了任务递增学习（task-IL），算法可以在推理时访问task-ID。这样的方法不必区分来自不同任务的类。最近已经开始考虑类递增学习（class-IL），即学习者在推理时无法访问task-ID，因此必须能够区分所有任务的所有类。
 
+该文对现有的递增学习方法进行了全面调查，尤其是对12种类递增方法进行了广泛的实验评估。作者考虑了几种实验方案，包括对多个大型数据集的类递增方法进行比较、对小型和大型domain shifts进行调查以及比较各种网络体系的结构等。
+
+### 5.3.2三类方法
+1）基于正则化的解决方案，旨在最大程度地减少学习新任务对先前任务重要权重的影响；
+2）基于示例的解决方案，存储有限的示例集以防止对先前任务的遗忘；
+3）直接解决task-recency bias的解决方案，在类递增学习方法中，这是指对最近学习的任务偏差。
+### 5.3.3 类递增学习发生灾难性遗忘的原因
+1. 权重漂移（Weight drift）：在学习新任务时，将更新与旧任务相关的网络权重，以最大程度地减少新任务的损失。但是先前任务的性能会受到损害，通常会非常严重。
+2. 激励漂移（Activation drift）：与权重漂移密切相关，改变权重会导致激活变化，进而导致网络输出变化。
+3. 任务间混淆（Inter-task confusion）：在类递增学习，目标是将所有类与所有任务区分开。但是，由于永远不会共同训练类，网络权重无法最优区分所有类。
+4. 任务出现偏差（Task-recency bias）：单独学习的任务可能具有无可比拟的分类器输出。通常最主要的任务偏差是针对较新的任务类，confusion matrices可以清楚地观察到这种效果。
+### 5.3.4 解决前面灾难性遗忘的方法
+1. regularization based methods
+2. rehearsal-based methods
+Incremental Classifier and Representation Learning (iCaRL)、内存、采样、任务平衡、排练和正则化组合。
+3. bias-correction methods
+Bias Correction (BiC)、End-to-End Incremental Learning (EEIL)，Learning a Unified Classifier Incrementally via Rebalancing (LUCIR)，Class-IL with dual memory (IL2M).
+### 5.3.5 目前类递增学习新兴的趋势：
+1. Exemplar learning 对样本进行参数设置并优化以防止遗忘。
+2. Feature rehearsal 执行特征重放而不是图像重放，其中训练一个生成器在网络某个隐藏层生成特征。 这样，不想pseudo rehearsal那样，排练方法也可以应用于复杂的数据集。
+3. Explicit task classification 在每个任务上学习一个classifier head，其只能区分任务内的类，而另一个分类器则预测task label。尚不清楚，为什么以及什么时候，显式任务分类优于一个联合分类器的学习。
+4. Self- and unsupervised incremental learning 有一种方法，可以执行明确的任务分类并采用高斯混合模型拟合学习的表示。
+5. Meta-learning 在解决相关任务时积累的信息用来学习新任务。 这种方法可以学习那些能减少未来梯度干扰并基于此改善传递的参数。
+6. 
 # Reference
 1. Thrun S, Mitchell T M. Lifelong robot learning. In: Steels L,ed. The Biology and Technology of    Intelligent Autonomous Agents. Berlin: Springer,1995, 165–196
 2. Thrun S. Is learning the n-th thing any easier than learning the first? Advances in Neural Information Processing Systems,1996: 640–646
