@@ -67,6 +67,55 @@ GEM方向的后续改进还有Efficient Lifelong Learning with A-GEM (ICLR 2019)
 PackNet (2018 CVPR) 是一种对新旧任务参数进行硬隔离的办法。每次新任务到来时，PackNet增量使用一部分模型空间，通过剪枝的方法保留冗余的模型空间，为下次任务留下余量。对于一个新任务，训练过程分两步，第一步，模型首先固定旧任务参数，使用整个模型训练当前任务，完成后利用剪枝去除一部分非重要参数。第二步，模型在剩下的参数空间中进行重新训练。显然，PackNet为每个任务分配一部分参数空间，限制了任务个数，对任务的顺序也带来了要求。
 
 HAT(ICML 2018) 使用硬注意力(Hard Attention)机制根据不同任务对模型的不同部分进行遮盖(Mask)，从而为每个任务分配模型的不同部分。同时，HAT使用正则化项对注意力遮盖进行稀疏性约束，使得模型空间可以在任务间进行更好的分配。HAT方法期望使用注意力机制对模型空间进行了任务自适应的分配，可以更好地在任务间共享和隔离参数。
+# 5. 重要的paper
+## 5.1 Continual Lifelong Learning with Neural Networks: A Review (2019)
+5.1.1 摘要
+
+在这篇综述中，总结了与人工学习系统的continual/lifelong learning相关挑战，并比较了现有那些在不同程度上减轻catastrophic forgetting的NN方法。尽管NN在特定领域学习方面已取得了重大进展，但要在自动化智体和机器人上开发强大的lifelong learning，还需要进行大量研究。为此作者讨论了由生物系统中的lifelong learning因素所激发的各种研究，如structural plasticity、memory replay、curriculum & transfer learning、intrinsic motivation和multisensory integration等。
+
+5.1.2
+常规神经网络模型训练串行任务时候，新任务的学习会使先前学习的任务性能大大降低。尽管重新training from scratch从实用上解决了catastrophic forgetting，但效率极低，还阻碍了实时地学习新数据。
+
+5.1.3
+稳定性-可塑性（stability-plasticity）难题
+
+5.1.4 减轻灾难性遗忘的尝试
+1. 存储以前数据的存储系统，其定期重放那些与新数据抽取样本做交错的旧样本。
+2. 设计专门的机制来保护合并的知识不被新信息的学习所覆盖。
+3. 在连接主义（connectionist）模型，当要学习的新实例与先前观察的实例出现明显不同时，会发生灾难性遗忘。除了预定义足够量的神经资源，避免连接主义模型的灾难性遗忘有三个关键点：（i）为新知识分配额外的神经资源；（ii）如果资源固定，则使用非重叠的表示形式；（iii）把新信息和旧知识交织一起在表示中。
+
+5.1.5 介绍并比较不同的神经网络方法来缓解不同程度的灾难性遗忘
+
+从概念上讲，这些方法可以分为：
+1）重新训练整个网络同时进行正则化防止以前学过的任务造成灾难性遗忘，
+2）选择性训练网络并在必要时扩展以代表新网络，
+3） 为记忆整合建模互补学习系统，例如用内存重放来合并内部表示。
+
+1. 正则化方法（见4.1）
+2. Dynamic Architectures方法对新信息的响应是通过动态适应新的神经资源改变体系结构属性，例如增加神经元或网络层进行重新训练。
+3. CLS方法和内存重放（见4.2）
+
+5.1.6 
+在终身学习任务中这些算法的严格评估很少，为此作者讨论了使用和设计量化指标去测量大规模数据集的灾难性遗忘。 
+
+5.1.7
+希望从连续的sensorimotor体验中递增学习，以及多感官信息整合。
+
+1. 发展性学习（Developmental learning）实时调节智体与环境的具体交互。
+与提供大量信息的计算模型相反，发展性智体基于其sensorimotor经验以自主方式获得越来越复杂的技能。因此，分阶段发展（staged development），对于以较少的辅导经验来提升认知能力，至关重要。主动推理模型旨在了解如何通过动作和感知的双边使用来选择在动态和不确定环境下最能暴露原因的数据。
+
+2. 有意义的方式组织示例，例如使学习任务难度逐渐变大，人和动物的学习性能会更好，即课程学习（curriculum learning）。
+这激发了机器人技术中的类似方法和关于课程学习影响学习绩效的新机器学习方法。一些数据集（例如MNIST）进行的实验表明，课程学习可作为无监督的预训练，提高泛化能力，并加快训练收敛速度。但是，课程学习的有效性对于任务进展方式非常敏感。课程策略可以看作是迁移学习的特例，在初始任务收集的知识用来指导复杂的学习过程。
+
+3. 迁移学习
+前向迁移是指学习任务TA对未来任务TB性能的影响，而后向迁移是指当前任务TB对先前任务TA的影响。因此，假设同时学习多个学习任务以提高一项特定任务的性能，迁移学习代表了一种人工系统的重要功能，即从有限量的特定样本推断一般规律。迁移学习一直是机器学习和自主智体的一个开放的挑战。尽管说，通过编码个体、目标或场景元素不变关系信息的概念表示，抽象知识的迁移得以实现，但人们对大脑的特定神经机制调节高级迁移学习的了解却很少。 零样本学习和单样本学习在新任务上表现出色，但不能防止灾难性遗忘。
+
+4. Intrinsic Motivation的计算模型从人类婴幼儿选择目标并逐步掌握技能的方式中获得启发，以此定义终身学习框架的发展结构。
+内在动机的计算模型可以通过学习课程的在线（自）生成来收集数据并逐步获得技能。这允许通过主动控制复杂度的增长来有效和随机地选择学习任务。增强学习（reinforcement learning）的最新工作包括curiosity和Intrinsic Motivation，以解决奖励稀少或具有欺骗性的情况。在外部奖励非常稀疏的情况下，curiosity-driven exploration会提供内在的奖励信号，使智体能够自主地、逐步地学习日益复杂的任务。
+
+5. 多感官处理（Multisensory Learning）是交叉模式激励的物理特性、先验知识、期望（例如，学习的相关性）、协同（scaffolding）感知、认知和行为之间相互作用的结果。
+Multisensory Learning的过程在整个生命是动态的，会受到短期和长期变化的影响。它由外在和内在（exogenous & endogenous）因素的动态加权组成，这些因素决定了多模态如何相互影响。
+
 # Reference
 1. Thrun S, Mitchell T M. Lifelong robot learning. In: Steels L,ed. The Biology and Technology of    Intelligent Autonomous Agents. Berlin: Springer,1995, 165–196
 2. Thrun S. Is learning the n-th thing any easier than learning the first? Advances in Neural Information Processing Systems,1996: 640–646
