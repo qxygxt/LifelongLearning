@@ -29,6 +29,27 @@ Thrun和Mitchell[1]率先研究终身强化学习用于机器人学习。Tanaka�
 ## 3.5 总结
 尽管终身学习已有20多年的研究历史，但是目前为止还没有太多的研究。一个可能的原因是机器学习研究在过去20年主要关注统计和规则的方法。终身学习主要需要系统的方法。
 然而，随着统计机器学习变得愈加成熟，研究者意识到它的局限性，终身学习将变得越来越重要。我们可以比较确信地说，如果没有终身学习的能力，即通过不断地积累已学到的知识并且用已有的知识以一种自激励的方式学习新的任务，我们不可能建立真正的智能系统，我们也仅能在一个很具体的领域解决问题。
+# 4. 终身学习的方法的划分
+## 4.1 正则化
+其主要思想是「通过给新任务的损失函数施加约束的方法来保护旧知识不被新知识覆盖」，这类方法通常不需要用旧数据来让模型复习已学习的任务，因此是最优雅的一类增量学习方法。
+Learning without Forgetting (ECCV 2016)[4]提出的LwF算法是基于深度学习的增量学习的里程碑之作。LwF算法是介于联合训练和微调训练之间的训练方式，LwF的特点是它不需要使用旧任务的数据也能够更新。LwF算法的主要思想来自于knowledge distillation，也就是使新模型在新任务上的预测和旧模型在新任务上的预测相近。
+具体来说，LwF算法先得到旧模型在新任务上的预测值，在损失函数中引入新模型输出的蒸馏损失，然后用微调的方法在新任务上训练模型，从而避免新任务的训练过分调整旧模型的参数而导致新模型在旧任务上性能的下降。但是，这种方法的缺点是高度依赖于新旧任务之间的相关性，当任务差异太大时会出现任务混淆的现象(inter-task confusion)，并且一个任务的训练时间会随着学习任务的数量线性增长，同时引入的正则项常常不能有效地约束模型在新任务上的优化过程。
+概括起来，基于正则化的增量学习方法通过引入额外损失的方式来修正梯度，保护模型学习到的旧知识，提供了一种缓解特定条件下的灾难性遗忘的方法。不过，虽然目前的深度学习模型都是过参数化的，但模型容量终究是有限的，我们通常还是需要在旧任务和新任务的性能表现上作出权衡。
+各种不同的正则化手段：
+Learning without Memorizing (CVPR 2019)
+Learning a Unified Classifier Incrementally via Rebalancing (CVPR 2019)
+Class-incremental Learning via Deep Model Consolidation (WACV 2020)
+## 4.2 回放
+在训练新任务时，一部分具有代表性的旧数据会被保留并用于模型复习曾经学到的旧知识，因此「要保留旧任务的哪部分数据，以及如何利用旧数据与新数据一起训练模型」，就是这类方法需要考虑的主要问题。
+iCaRL: Incremental Classifier and Representation Learning (CVPR 2017)是最经典的基于回放的增量学习模型，iCaRL的思想实际上和LwF比较相似，它同样引入了蒸馏损失来更新模型参数，但又放松了完全不能使用旧数据的限制。
+LwF在训练新数据时完全没用到旧数据，而iCaRL在训练新数据时为每个旧任务保留了一部分有代表性的旧数据(iCaRL假设越靠近类别特征均值的样本越有代表性)，因此iCaRL能够更好地记忆模型在旧任务上学习到的数据特征。
+另外Experience Replay for Continual Learning (NIPS 2019)指出这类模型可以动态调整旧数据的保留数量，从而避免了LwF算法随着任务数量的增大，计算成本线性增长的缺点。
+基于iCaRL算法的一些有影响力的改进算法包括End-to-End Incremental Learning (ECCV 2018)和Large Scale Incremental Learning (CVPR 2019)，这些模型的损失函数均借鉴了知识蒸馏技术，从不同的角度来缓解灾难性遗忘问题，不过灾难性遗忘的问题还远没有被满意地解决。
+iCaRL的增量学习方法会更新旧任务的参数 ，因此很可能会导致模型对保留下来的旧数据产生过拟合，Gradient Episodic Memory for Continual Learning (NIPS 2017)针对该问题提出了梯度片段记忆算法(GEM)，GEM只更新新任务的参数而不干扰旧任务的参数，GEM以不等式约束的方式修正新任务的梯度更新方向，从而希望模型在不增大旧任务的损失的同时尽量最小化新任务的损失值。
+GEM方向的后续改进还有Efficient Lifelong Learning with A-GEM (ICLR 2019)和Gradient based sample selection for online continual learning (NIPS 2019)。
+另外，也有一些工作将VAE和GAN的思想引入了增量学习，比如Variational Continual Learning (ICLR 2018)指出了增量学习的贝叶斯性质，将在线变分推理和蒙特卡洛采样引入了增量学习，Continual Learning with Deep Generative Replay (NIPS 2017)通过训练GAN来生成旧数据，从而避免了基于回放的方法潜在的数据隐私问题，这本质上相当于用额外的参数间接存储旧数据，但是生成模型本身还没达到很高的水平，这类方法的效果也不尽人意。
+总体来说，基于回放的增量学习的主要缺点是需要额外的计算资源和存储空间用于回忆旧知识，当任务种类不断增多时，要么训练成本会变高，要么代表样本的代表性会减弱，同时在实际生产环境中，这种方法还可能存在「数据隐私泄露」的问题。
+## 4.3 参数隔离
 # Reference
 1. Thrun S, Mitchell T M. Lifelong robot learning. In: Steels L,ed. The Biology and Technology of    Intelligent Autonomous Agents. Berlin: Springer,1995, 165–196
 2. Thrun S. Is learning the n-th thing any easier than learning the first? Advances in Neural Information Processing Systems,1996: 640–646
