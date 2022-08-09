@@ -1,9 +1,9 @@
 # LifelongLearning
 
-# 1. Brief introduction
+# 1. Brief Introduction
 Lifelong learning终生学习，又名continuous learning，increment learning，never ending learning。
 通常机器学习中，单个模型只解决单个或少数几个任务，对于新的任务，我们一般重新训练新的模型。而LifeLong learning，则先在task1上使用一个模型，然后在task2上仍然使用这个模型，一直到task n。Lifelong learning探讨的问题是，一个模型能否在很多个task上表现都很好，如此下去，模型能力就会越来越强。
-# 2. LifeLong learning需要解决的三个问题
+# 2. LifeLong Learning 需要解决的三个问题
 ## 2.1 Knowledge Retention 知识记忆
 我们不希望学完task1的模型，在学习task2后，在task1上表现糟糕。也就是希望模型有一定的记忆能力，能够在学习新知识时，不要忘记老知识。但同时模型不能因为记忆老知识，而拒绝学习新知识。总之在新老task上都要表现比较好。
 ## 2.2 Knowledge Transfer 知识迁移
