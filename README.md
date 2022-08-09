@@ -128,7 +128,7 @@ Multisensory Learning的过程在整个生命是动态的，会受到短期和�
 
 该文对现有的递增学习方法进行了全面调查，尤其是对12种类递增方法进行了广泛的实验评估。作者考虑了几种实验方案，包括对多个大型数据集的类递增方法进行比较、对小型和大型domain shifts进行调查以及比较各种网络体系的结构等。
 
-### 5.3.2三类方法
+### 5.3.2类递增学习主要挑战的三类解决方案
 1）基于正则化的解决方案，旨在最大程度地减少学习新任务对先前任务重要权重的影响；
 2）基于示例的解决方案，存储有限的示例集以防止对先前任务的遗忘；
 3）直接解决task-recency bias的解决方案，在类递增学习方法中，这是指对最近学习的任务偏差。
@@ -149,7 +149,7 @@ Bias Correction (BiC)、End-to-End Incremental Learning (EEIL)，Learning a Unif
 3. Explicit task classification 在每个任务上学习一个classifier head，其只能区分任务内的类，而另一个分类器则预测task label。尚不清楚，为什么以及什么时候，显式任务分类优于一个联合分类器的学习。
 4. Self- and unsupervised incremental learning 有一种方法，可以执行明确的任务分类并采用高斯混合模型拟合学习的表示。
 5. Meta-learning 在解决相关任务时积累的信息用来学习新任务。 这种方法可以学习那些能减少未来梯度干扰并基于此改善传递的参数。
-6. 
+
 # Reference
 1. Thrun S, Mitchell T M. Lifelong robot learning. In: Steels L,ed. The Biology and Technology of    Intelligent Autonomous Agents. Berlin: Springer,1995, 165–196
 2. Thrun S. Is learning the n-th thing any easier than learning the first? Advances in Neural Information Processing Systems,1996: 640–646
