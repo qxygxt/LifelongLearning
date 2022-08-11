@@ -15,7 +15,7 @@ Available at https://arxiv.org/abs/2207.07840
 二、 论文概述
 LML classification的关键性挑战在于构建label间的关系以及减少灾难性遗忘。
 作者构建了基于auto-updated expert机制的AGCN网络和表示label间关系的ACM矩阵来解决这两个挑战。前一个task训练完成的AGCN网络作为expert产生soft label作为ACM矩阵的一部分，将ACM矩阵结合下一个task的训练资料更新网络的参数。
-distillation loss 和 relationship-preserving loss function 分别被用来减缓 class-level forgetting 和 relationship-level forgetting。
+损失函数中除了classification loss还有distillation loss(基于expert机制) 和 relationship-preserving loss function (基于embeddings)分别被用来减缓 class-level forgetting 和 relationship-level forgetting。
 
 三、Methodology
 1. Augmented Correlation Matrix (ACM)
@@ -37,6 +37,7 @@ inter-task label independences
 2. Augmented Graph Convolutional Network (AGCN)
   AGCN 是一种 two-layer stacked graph model，输入ACM矩阵和embedding(用Glove embedding初始化)，AGCN输出graph presentation.
   将这个graph presentation与一个CNN的feature extractor做点积得出prediction.
+  
 四、减轻灾难性遗忘的方法
 1. 对于the class-level catastrophic forgetting
     借鉴于distillation-based lifelong learning method。
@@ -45,4 +46,12 @@ inter-task label independences
 2. 对于the relationship-level forgetting
     利用旧的节点嵌入的部分约束使损失函数最小，限制了AGCN parameter的改变，使已建立的标签关系的遗忘得到了缓解 
 3. 总的loss被定义为classification loss，以及以上两点的loss这三者的加权和
-   在作者最后的超参设置中，classification loss和distillation loss的权重分别仅有0.07和0.93，但relationship-preserving loss 却是1e5，此时性能获得较大的增益，这意味着缓解relationship的灾难性遗忘对LML分类是非常重要的.
+   在作者最后的超参设置中，classification loss和distillation loss的权重分别仅有0.07和0.93，但relationship-preserving loss 却是1e5，此时性能获得较大的增益，这意味着缓解relationship的灾难性遗忘对LML分类是非常重要的。
+   
+五、实验
+1. 数据集（2组）
+Split-COCO: 40 most frequent conceptsfrom 80 classes of MS-COCO
+Split-WIDE: 21 most frequent concepts from 81 classesof NUS-WIDE
+2. 评价指标 (4个)
+mAP, CF1, OF1, and Forgetting measure
+3. 结果
