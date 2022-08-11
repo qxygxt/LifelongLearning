@@ -1,2 +1,36 @@
 This is the cite of my learning paper:
 Du K, Li L, Lyu F, et al. Class-Incremental Lifelong Learning in Multi-Label Classification[J]. arXiv preprint arXiv:2207.07840, 2022.
+Available at https://arxiv.org/abs/2207.07840
+
+一、 论文概述
+
+二、 
+1. 类增量学习：构建了一个统一的可进化分类器，该分类器从顺序图像数据流中在线学习新的类，并对看到的类实现多类分类。
+2. 文中提到的类增量学习有两类，都存在灾难性遗忘的问题：
+    （1） Lifelong Single-Label (LSL) classification
+          已有的一些方法，比如LwF,对灾难性遗忘作出了解决。
+          但只考虑single-labelled input data，因此生活中不实用。
+          
+    （2）Lifelong Multi-Label (LSL) classification
+三、Methodology
+1. Augmented Correlation Matrix (ACM)
+  由于 partial label problem,无法直接用数据构造class relation,因此作者使用了ACM来近似地表示所有机器已经看到的classes之间的relationship,并且capture the intra- and
+inter-task label independences
+1.1 ACM由四部分组成
+(1)Old-Old block: 
+   表示intra- and inter-task label relationships between old and old classes.
+   也就是上一个任务的整个ACM矩阵。
+(2)New-New block:
+    表示intra-task label relationships among the new classes.
+    其每一项是由两个classes的example数量与其中一个class的example数量之比计算得出，并且由于是online data stream，每步都会更新此block。
+(3)Old-New block
+    表示label relationships between old and new classes
+    由上一个任务保存的network，称expert，产生的soft label以及本任务hard label得出。
+(4)New-Old block
+    表示label relationships between new and old classes
+    基于贝叶斯，在已经看见过class i的情况下，再出现class j的概率，同样由soft label以及hard label得出。
+ 2. Augmented Graph Convolutional Network (AGCN)
+  AGCN 是一种 two-layer stacked graph model，输入ACM矩阵和embedding(用Glove embedding初始化)，AGCN输出graph presentation.
+  将这个graph presentation与一个CNN的feature extractor做点积得出prediction.
+四、减轻灾难性遗忘的方法
+ 
