@@ -30,6 +30,8 @@ Lampert在他的论文[13]中，介绍了一种unseen class learning的方法，
 未标记数据包含一些已标记数据中没出现的类，详见Guo的论文[14]提出了一种简单有效的安全深度SSL方法，以减轻其带来的危害。
 #### 1.2.3.2 与LML的区别
 unseen class learning与LML较为类似，都有积累所学知识的特点，但unseen class learning并不会利用知识库中的知识来帮助未来的学习，仅仅是通过新的训练资料来丰富知识库。
+## 1.3 关于LML中的task
+## 1.4 如何评价LML模型的好坏
 # 2. LifeLong Learning 需要解决的三个问题
 ## 2.1 Knowledge Retention 知识记忆
 我们不希望学完task1的模型，在学习task2后，在task1上表现糟糕。也就是希望模型有一定的记忆能力，能够在学习新知识时，不要忘记老知识。但同时模型不能因为记忆老知识，而拒绝学习新知识。总之在新老task上都要表现比较好。
