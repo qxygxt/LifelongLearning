@@ -55,3 +55,6 @@ Split-WIDE: 21 most frequent concepts from 81 classesof NUS-WIDE
 2. 评价指标 (4个)
 mAP, CF1, OF1, and Forgetting measure
 3. 结果
+AGCN在这四个指标上的表现均好于现阶段最先进的模型，证明了AGCN 在 large-scale multi-label dataset 是非常有效的。
+4. 结果的分析
+分析是基于ACM矩阵的，在实验结束之后，将ACM矩阵可视化之后可以发现，相关性高的两个classes之间的依赖关系权重比不相关的类要大，这意味着即使旧的class不可用，也可以很好地构建任务内部和任务之间的关系。
