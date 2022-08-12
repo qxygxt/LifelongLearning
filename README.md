@@ -12,15 +12,17 @@ Lifelong learning终生学习，又名continuous learning，increment learning�
 ### 1.2.1 Transfer Learning
 迁移学习使用一个源域来帮助一个目标获取域学习。它假设源域S有大量的标记训练数据，目标域T只有很少或没有标记的训练数据，但有大量未标记的数据。TL利用被标记的数据来帮助在目标域中学习。
 
+TL是N=2时的终身学习。
+
 TL与终身学习的不同点：
 1. TL不是连续的。它只使用源域来帮助目标域学习。
 2. TL并没有积累所学的知识。
-3. TL是单向的，使用源来帮助目标。LML可以在任何方向上进行。
+3. TL是单向的，使用源来帮助目标，不关注模型是否还能解决前一个任务。新的LML可以在任何方向上进行。
 4. TL假设源与目标非常相似。这种相似性是由人类用户决定的。LML并没有做出这样一个强有力的假设。人类用户通常不参与确定任务的相似性。
 ### 1.2.2 多任务学习(MTL)
 大多数机器学习任务都是单任务学习,忽略了任务之间所富含的丰富的关联信息，多任务学习就是把多个相关（related）的task放在一起学习。
 
-但MTL仍然在传统的范式中工作，没有持续学习的概念，这是LML的关键特性。
+但MTL仍然在传统的范式中工作，没有持续学习的概念，这是LML的关键特性。并且LML不能同时优化过去和现在的task。
 ### 1.2.3 unseen class learning
 #### 1.2.3.1 我认为unseen class learning分为两类：
 1. supervised learning
@@ -31,6 +33,10 @@ Lampert在他的论文[13]中，介绍了一种unseen class learning的方法，
 #### 1.2.3.2 与LML的区别
 unseen class learning与LML较为类似，都有积累所学知识的特点，但unseen class learning并不会利用知识库中的知识来帮助未来的学习，仅仅是通过新的训练资料来丰富知识库。
 ## 1.3 关于LML中的task
+什么是新任务：如果在一个任务中，旧任务的数据不再可用，那么这就是一个新任务。
+
+如何判断是否为新任务：任务之间的relationships are typically estimated based on 训练数据，但是这在LML中是低效的，因此一些研究，比如Mohammed等[15]，指出可以使用更高级的任务描述来确定任务之间的关系，也就得出了是否为新任务。
+
 ## 1.4 如何评价LML模型的好坏
 # 2. LifeLong Learning 需要解决的三个问题
 ## 2.1 Knowledge Retention 知识记忆
@@ -194,3 +200,4 @@ Bias Correction (BiC)、End-to-End Incremental Learning (EEIL)，Learning a Unif
 12. BouAmmar H, Eaton E, Ruvolo P, Taylor M. Online multi-task learning for policy gradient methods. In: Proceedings of the 31st International Conference on Machine Learning. 2014, 1206–1214
 13. C. H. Lampert, H. Nickisch and S. Harmeling, "Learning to detect unseen object classes by between-class attribute transfer," 2009 IEEE Conference on Computer Vision and Pattern Recognition, 2009, pp. 951-958, doi: 10.1109/CVPR.2009.5206594.
 14. Guo, L., Zhang, Z., Jiang, Y., Li, Y. &amp; Zhou, Z.. (2020). Safe Deep Semi-Supervised Learning for Unseen-Class Unlabeled Data.
+15. Isele D, Rostami M, Eaton E. Using task descriptions in lifelong machine learning for improved performance and zero-shot transfer[J]. arXiv preprint arXiv:1710.03850, 2017.
