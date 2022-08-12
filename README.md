@@ -18,9 +18,18 @@ TL与终身学习的不同点：
 3. TL是单向的，使用源来帮助目标。LML可以在任何方向上进行。
 4. TL假设源与目标非常相似。这种相似性是由人类用户决定的。LML并没有做出这样一个强有力的假设。人类用户通常不参与确定任务的相似性。
 ### 1.2.2 多任务学习(MTL)
-大多数机器学习任务都是单任务学习,忽略了任务之间所富含的丰富的关联信息，多任务学习就是把多个相关（related）的task放在一起学习,但MTL仍然在传统的范式中工作，没有持续学习的概念，这是LML的关键特性.
-### 1.2.3 unseen class learning
+大多数机器学习任务都是单任务学习,忽略了任务之间所富含的丰富的关联信息，多任务学习就是把多个相关（related）的task放在一起学习。
 
+但MTL仍然在传统的范式中工作，没有持续学习的概念，这是LML的关键特性。
+### 1.2.3 unseen class learning
+#### 1.2.3.1 我认为unseen class learning分为两类：
+1. supervised learning
+Lampert在他的论文[13]中，介绍了一种unseen class learning的方法，使用这种attribute-based classification的方法，机器可以做到即使没有看过某个class的训练资料，也可以detect这个class的object。因为机器在学习的时候不是直接学习images，而是学习类似于人类辨识物体的high-level description，比如形状颜色地理信息等。
+
+2. semisupervised learning
+未标记数据包含一些已标记数据中没出现的类，详见Guo的论文[14]提出了一种简单有效的安全深度SSL方法，以减轻其带来的危害。
+#### 1.2.3.2 与LML的区别
+unseen class learning与LML较为类似，都有积累所学知识的特点，但unseen class learning并不会利用知识库中的知识来帮助未来的学习，仅仅是通过新的训练资料来丰富知识库。
 # 2. LifeLong Learning 需要解决的三个问题
 ## 2.1 Knowledge Retention 知识记忆
 我们不希望学完task1的模型，在学习task2后，在task1上表现糟糕。也就是希望模型有一定的记忆能力，能够在学习新知识时，不要忘记老知识。但同时模型不能因为记忆老知识，而拒绝学习新知识。总之在新老task上都要表现比较好。
@@ -181,3 +190,5 @@ Bias Correction (BiC)、End-to-End Incremental Learning (EEIL)，Learning a Unif
 10. Mitchell T, Cohen W, Hruschka E, Talukdar P, Betteridge J, Carlson A, Dalvi B, Gardner M, Kisiel B, Krishnamurthy J, Lao N, Mazaitis K, Mohamed T, Nakashole N, Platanios E, Ritter A, Samadi M, Settles B, Wang R, Wijaya D, Gupta A, Chen X, Saparov A, Greaves M, Welling J. Never-ending learning. In: Proceedings of the 29th AAAI Conference on Artificial Intelligence.2015, 2302–2310
 11. Tanaka F, Yamamura M. An approach to lifelong reinforcement learning through multiple environments. In: Proceedings of the 6th European Workshop on Learning Robots. 1997, 93–9
 12. BouAmmar H, Eaton E, Ruvolo P, Taylor M. Online multi-task learning for policy gradient methods. In: Proceedings of the 31st International Conference on Machine Learning. 2014, 1206–1214
+13. C. H. Lampert, H. Nickisch and S. Harmeling, "Learning to detect unseen object classes by between-class attribute transfer," 2009 IEEE Conference on Computer Vision and Pattern Recognition, 2009, pp. 951-958, doi: 10.1109/CVPR.2009.5206594.
+14. Guo, L., Zhang, Z., Jiang, Y., Li, Y. &amp; Zhou, Z.. (2020). Safe Deep Semi-Supervised Learning for Unseen-Class Unlabeled Data.
